@@ -25,3 +25,18 @@ tvShow = false; // not a valid type
 let isFunny = false; // TS knows that it's boolean
 isFunny = true; // valid
 isFunny = "asd"; // not a valid type
+
+// Delayed Initialization
+const movies = ["Interstellar", "Back To The Future", "Inception", "Aliens"];
+// If we don't annotate type here - it will be "any" - that's not good
+let foundMovie: string;
+
+for (let movie of movies) {
+	if (movie === "Interstellar") {
+		foundMovie = "Interstellar";
+	}
+}
+
+foundMovie(); // invalid - string is not callable
+foundMovie = 1; // invalid - number is not assignable to string
+foundMovie.sdksdfjsdf(); // invalid - no such method for string
