@@ -3,11 +3,20 @@
 // We can use them to crate reusable, modular types
 // that describe the shapes of objects (and objects only?).
 
-// Type recap:
+// Differences:
+// Interface describes shape of object only (can't describe literals)
+// We can reopen interfaces and can't do same with type aliases
+// We can extend interfaces (like class in OOP) with extend keyword,
+// but to extend type alias we should use "&"
+
+// Type alias recap:
 type Person1 = {
 	name: string;
 	age: number;
 };
+
+// Only type can describe this (union type between two literals):
+type Color = "red" | "blue";
 
 interface Person {
 	name: string; // alternatively - use commas
@@ -91,3 +100,106 @@ const shoes: Product = {
 };
 
 console.log(shoes.applyDiscount(0.4)); // 60
+
+// =======================================================
+// Reopening interfaces
+// It's possible to reopen an add new props to interface
+// which is NOT possible with types
+
+// Type (unable to add new props)
+type Person10 = {
+	name: string;
+};
+
+// Error - duplicate identifier
+type Person10 = {
+	age: number;
+};
+
+// Interface (able to add new props)
+// At first we have interface:
+interface Person11 {
+	name: string;
+}
+
+// Then we reopening it and adding prop:
+// it's not redeclaring/rewriting interface
+// it's combining
+// this means person11 ALSO has an age:
+interface Person11 {
+	age: number;
+}
+
+// Perfectly okay - person has name & age
+const person: Person11 = {
+	name: "Jerry",
+	age: 42,
+};
+
+// example 2
+// imagine that we have interface declared inside some other file:
+interface Dog {
+	name: string;
+	age: number;
+}
+
+// inside our file - we want a dog to have extra props
+interface Dog {
+	breed: string;
+	bark(): string;
+}
+
+const elton: Dog = {
+	name: "Elton",
+	age: 0.5,
+	breed: "Australian Shepherd",
+	bark() {
+		return "WOOF WOOF!";
+	},
+};
+
+// =======================================================
+// Extending interfaces
+// like with OOP and classes
+
+// What if we want a service-dog - it's different type that inherits props from dogs but has something special
+
+interface ServiceDog extends Dog {
+	job: "drug snffer" | "bomb sniffer" | "guide dog";
+}
+
+const chewy: ServiceDog = {
+	name: "Chewy",
+	age: 4.5,
+	breed: "Lab",
+	bark() {
+		return "Bark!";
+	},
+	job: "guide dog",
+};
+
+// =======================================================
+// Interface Multiple Inheritance
+
+interface Human {
+	name: string;
+}
+
+interface Employee {
+	readonly id: number;
+	email: string;
+}
+
+// use comma to separate multiplie inherited interfaces:
+interface Engineer extends Human, Employee {
+	level: string;
+	languages: string[];
+}
+
+const pierre: Engineer = {
+	name: "Pierre",
+	id: 23443,
+	email: "pierre@gmail.com",
+	level: "senior",
+	languages: ["JS", "Python"],
+};
