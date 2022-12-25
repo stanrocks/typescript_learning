@@ -40,3 +40,47 @@ inputEl2.value = "Changed value"; // now this property exists for inputEl2
 const btn = document.querySelector(".btn");
 // Since I know that this btn suppose to be a button element, I can tell that to querySelector:
 const btn2 = document.querySelector<HTMLButtonElement>(".btn")!; // this ! means that button is not null
+
+// =============================================
+// Writing our own generic
+// It accepts some arg and simply return it
+
+// Imagine we want to write a function that accepts argument of some type and then returns value of that type
+// Doing this manually for every type:
+function numberIdentity(item: number): number {
+	return item;
+}
+function stringIdentity(item: string): string {
+	return item;
+}
+function booleanIdentity(item: boolean): boolean {
+	return item;
+}
+
+// What if we want universal function? This might seem to work, but:
+function identityBad(item: any): any {
+	return item; // actually there is no relationship between input and output types
+	// and we also want to avoid using type "any" as we can
+}
+
+// This is the solution:
+function identity<Type>(item: Type): Type {
+	return item;
+}
+// in <> we provide a type ("Type" usually written as "T")
+// then we annotate type of argument with same Type
+// then we annotate that returned type will be the same Type
+
+// "identity<Type>"" is general form. In case when argument is a string this basically becomes "identity<string>..."
+
+// let's call this function:
+identity<number>(7); // valid
+identity<string>(7); // invalid
+identity<string>("meow"); // valid
+
+interface Cat {
+	name: string;
+	breed: string;
+}
+
+identity<Cat>({ name: "Barsik", breed: "Siberian" });
