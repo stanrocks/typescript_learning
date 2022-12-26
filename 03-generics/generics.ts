@@ -1,3 +1,5 @@
+// https://www.typescriptlang.org/docs/handbook/2/generics.html
+
 // Generics allow us to define reusable functions and classes that work with multiple types rather than a single type
 
 function wrapInArray<T>(element: T): T[] {
@@ -84,3 +86,32 @@ interface Cat {
 }
 
 identity<Cat>({ name: "Barsik", breed: "Siberian" });
+
+// =============================================
+// Writing our own generic function - 2
+
+// Let's create a function that accepts a list and return one of its element
+// It might accept array of numbers, booleans or objects:
+// [4,5,6]
+// [true, false, true]
+// [{cat object}, {another cat object}, {one more cat object}]
+// and pick one of them and return it
+
+// function of getRandomElement captures argument type as T, accepts an array of type T as an argument and returns value of type T:
+function getRandomElement<T>(list: T[]): T {
+	const randomIndex = Math.floor(Math.random() * list.length);
+	return list[randomIndex];
+}
+
+// list is supposed to be an array of strings and returned value should be a string
+getRandomElement<string>(["a", "b", "c"]);
+// same for numbers:
+getRandomElement<number>([1, 2, 3, 4]);
+// list is supposed to be Cat attay and returned value should be type of Cat
+getRandomElement<Cat>([
+	{ name: "Barsik", breed: "Siberian" },
+	{ name: "Bebra", breed: "unknown" },
+]);
+
+// SO RELATIONSHIP IS NOW EXPRESSED between input and output types
+// Whatever type we provide to the generic as the type parameter - same type should be returned. And no matter what type it will be, it might be unknow for us now.
