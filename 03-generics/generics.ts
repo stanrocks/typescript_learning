@@ -115,3 +115,19 @@ getRandomElement<Cat>([
 
 // SO RELATIONSHIP IS NOW EXPRESSED between input and output types
 // Whatever type we provide to the generic as the type parameter - same type should be returned. And no matter what type it will be, it might be unknow for us now.
+
+// =============================================
+// Inferred Generic Type Parameters
+
+// When we call generic function, no need to specify type - TS is smart enough to understand that this is a list of strings:
+getRandomElement(["qewr", "sdfdf", "sdfdsf"]);
+// So TS can figure out that in this case T is string
+
+// or T is number:
+getRandomElement([31337, 42, 69]);
+
+// But it's not gonna know what type of DOM element this will return, because DOM doesn't exist yet when we type TS code and TS doesn't know what type is ".btn":
+const button = document.querySelector(".btn");
+
+// so in this case we need to provide type parameter like this
+const button2 = document.querySelector<HTMLButtonElement>(".btn")!;
