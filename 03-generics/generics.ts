@@ -131,3 +131,126 @@ const button = document.querySelector(".btn");
 
 // so in this case we need to provide type parameter like this
 const button2 = document.querySelector<HTMLButtonElement>(".btn")!;
+
+// =============================================
+// Generics With Multiple Types
+
+// Provide several parameters inside <>.
+// No need to specify what type will be returned, because it infers that type will be an intersection between T and U (hover to see "T & U"):
+function merge<T, U>(object1: T, object2: U) {
+	return {
+		...object1,
+		...object2,
+	};
+}
+
+const comboObj = merge({ name: "stan" }, { pets: ["barsik", "koshka"] });
+
+// =============================================
+// Adding Type Constraints
+
+merge({ name: "stan" }, 9); // 9 is not gonna be added to object, because spread will not work with number - it's not iterable
+// We should avoid using spread operator on numbers and not accept numbers as argument to a function that will use spread on that argument
+// That's why we extend type of T with object - it means that it will be an object with some values inside - it might be a string or a num - whatever
+function merge2<T extends object, U extends object>(object1: T, object2: U) {
+	return {
+		...object1,
+		...object2,
+	};
+}
+
+merge2({ name: "stan" }, 9); // now 9 is not valid anymore since its not an object
+
+merge2({ name: "stan" }, { num: 9 }); // now its valid and spreadable
+
+// Other example - interface as a constraint
+
+function printDoubleLength<T>(thing: T): number {
+	return thing.length * 2; // invalid - because T might be something that doesn't have a length
+}
+
+// Let's create interface
+interface Lengthy {
+	length: number;
+}
+
+// Lets create same function with different type parameter
+function printDoubleLength2<T extends Lengthy>(thing: T): number {
+	return thing.length * 2; // now it's valid
+}
+
+printDoubleLength2("sdf"); // valid because string has length
+printDoubleLength2(123); // invalid - number has no lenght
+
+// Its not a great use of generic
+// We might simply make function like this:
+function printDoubleLength3(thing: Lengthy): number {
+	return thing.length * 2;
+}
+// But it just shows how to constraint a generic when we really neew to use generic
+
+// =============================================
+// Default Type Parameters
+
+function makeEmptyArray<T>(): T[] {
+	return [];
+}
+
+// If we provide typpe parameter as string - we get string array:
+const strings = makeEmptyArray<string>(); // type is string[] (string array)
+strings.push("meow"); // valid
+
+// If we do not provide type parameter - we get an array of unknown type
+const arr = makeEmptyArray(); // type is unknown[]
+
+// If we want to provide a different default value, like number or any or numbers and strings we can do this (number type by default):
+function makeEmptyArray2<T = number>(): T[] {
+	return [];
+}
+
+const arr2 = makeEmptyArray2(); // type is number[] (as default)
+const arr3 = makeEmptyArray2<boolean>(); // type is boolean[]
+
+// =============================================
+// Writing Generic Classes
+
+// Imagine we have an app where user can create Video Playlist or Song Playlist:
+
+interface Song {
+	title: string;
+	artist: string;
+}
+
+interface Video {
+	title: string;
+	creator: string;
+	resolution: string;
+}
+
+// class VideoPlaylist {
+// 	public videos: Video[] = [];
+// }
+
+// class SongPlaylist {
+// 	public songs: Song[] = [];
+// }
+
+// Instead of those classes we can create generic class:
+class Playlist<T> {
+	public queue: T[] = [];
+	add(el: T) {
+		this.queue.push(el);
+	}
+}
+
+// We can create instance of Playlist of type Song:
+const songs = new Playlist<Song>();
+songs.add({ title: "Last Christmas", artist: "George Michael" }); // added song should match the pattern of Song interface
+
+// And using same generic class we can create and array of videos, and when videos are added - they should match the pattern of Playlist interface:
+const videos = new Playlist<Video>();
+videos.add({
+	title: "Cat meowing",
+	creator: "coolguy1994",
+	resolution: "fullhd",
+});
