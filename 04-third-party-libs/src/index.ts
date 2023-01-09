@@ -1,6 +1,15 @@
 import axios from "axios";
+import _ from "lodash"; // no type declaration file - that's why there is an error here
+// package.json of lodash package doesn't have types or typings properties
+// Where to get type declarations for libs like that?
+// https://www.typescriptlang.org/docs/handbook/declaration-files/consumption.html#handbook-content
+// npm i --save-dev @types/lodash
+// No more error for importing from lodash.
+// And now vscode offers endings for lodash:
+_.sample([123, 1212, 3, 13, 133324, 43, 45]);
 
-// we can create an interface based on data from API:
+// So axios...
+// We can create an interface based on data from API:
 interface User {
 	id: number;
 	name: string;
@@ -24,8 +33,8 @@ interface User {
 
 // axios => RMB => go to type definition => index.d.ts
 // it may be used as a guide of how API works
-// For example check class Axios
-// it has "get" method that is a generic that accepts type
+// For example check class Axios.
+// It has "get" method that is a generic that accepts type
 // and then it provides it as T to AxiosResponse.
 // So check type RMB - definition for AxiosResponse
 // AxiosResponse has type of data: T
