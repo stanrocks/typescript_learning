@@ -11,6 +11,23 @@
 		<title>Modules</title>
 	</head>
 	<body>
-		<script src="./dist/index.js"></script>
+		<main>
+			For modules to work in browser we should:
+			<ol>
+				<li>
+					TSConfig: Modules - "module": "ES6" (or other ES****) instead of using
+					"commonjs"
+				</li>
+				<li>Index.html: in script tag - specify type="module"</li>
+				<li>
+					Run index.html using live-server, not just opening it locally and
+					directly in browser, because it should be served. Otherwise we'll get
+					an error
+				</li>
+			</ol>
+		</main>
+		<script
+			type="module"
+			src="./dist/index.js"></script>
 	</body>
 </html>
