@@ -4,8 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"serve": "webpack serve",
-		"build": "webpack"
+		"serve": "webpack-dev-server --config webpack.dev.js",
+		"build": "webpack --config webpack.prod.js"
 	},
 	"keywords": [],
 	"author": "",
@@ -15,6 +15,7 @@
 	},
 	"devDependencies": {
 		"@types/lodash": "^4.14.191",
+		"clean-webpack-plugin": "^4.0.0",
 		"ts-loader": "^9.4.2",
 		"typescript": "^4.9.4",
 		"webpack": "^5.75.0",
