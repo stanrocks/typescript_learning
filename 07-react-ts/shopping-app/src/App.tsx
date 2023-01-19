@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import ShoppingList from "./components/ShoppingList";
-import "./App.css";
+import ShoppingListForm from "./components/ShoppingListForm";
 import Item from "./models/item";
+import "./App.css";
 
 function App() {
 	const [items, setItems] = useState<Item[]>([]);
@@ -12,6 +13,7 @@ function App() {
 	return (
 		<div>
 			<ShoppingList items={items} />
+			<ShoppingListForm />
 		</div>
 	);
 }
